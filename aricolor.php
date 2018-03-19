@@ -25,16 +25,6 @@
 class ariColor {
 
 	/**
-	 * An array of our instances.
-	 *
-	 * @static
-	 * @access public
-	 * @since 1.0.0
-	 * @var array
-	 */
-	public static $instances = array();
-
-	/**
 	 * The color initially set.
 	 *
 	 * @access public
@@ -182,12 +172,11 @@ class ariColor {
 	/**
 	 * The class constructor.
 	 *
-	 * @access protected
 	 * @since 1.0.0
 	 * @param string|array $color The color.
 	 * @param string       $mode  The color mode. Leave empty to auto-detect.
 	 */
-	protected function __construct( $color = '', $mode = 'auto' ) {
+	function __construct( $color = '', $mode = 'auto' ) {
 		$this->color = $color;
 
 		if ( is_array( $color ) && isset( $color['fallback'] ) ) {
@@ -214,8 +203,6 @@ class ariColor {
 	/**
 	 * Gets an instance for this color.
 	 * We use a separate instance per color
-	 * because there's no need to create a completely new instance each time we call this class.
-	 * Instead using instances helps us improve performance & footprint.
 	 *
 	 * @static
 	 * @access public
@@ -225,14 +212,7 @@ class ariColor {
 	 * @return ariColor (object)
 	 */
 	public static function newColor( $color, $mode = 'auto' ) {
-
-		// Get an md5 for this color.
-		$color_md5 = ( is_array( $color ) ) ? md5( wp_json_encode( $color ) . $mode ) : md5( $color . $mode );
-		// Set the instance if it does not already exist.
-		if ( ! isset( self::$instances[ $color_md5 ] ) ) {
-			self::$instances[ $color_md5 ] = new self( $color, $mode );
-		}
-		return self::$instances[ $color_md5 ];
+		return (new self( $color, $mode ));
 	}
 
 	/**
